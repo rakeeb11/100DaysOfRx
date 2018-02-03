@@ -1,0 +1,15 @@
+ext {
+
+    def supportLibVersion = '27.0.2'
+    def rxJavaVersion = '2.1.9'
+
+    google = [
+            "appCompat" : "com.android.support:appcompat-v7:$supportLibVersion",
+            "recyclerView": "com.android.support:recyclerview-v7:$supportLibVersion",
+            "design": "com.android.support:design:$supportLibVersion"
+    ]
+
+    rx = [
+            "java": "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    ]
+}

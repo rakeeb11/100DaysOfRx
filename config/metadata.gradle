@@ -1,0 +1,10 @@
+ext {
+    config = [
+            "compileSdk": 27,
+            "appId": "com.infinite.rx",
+            "minSdk": 23,
+            "targetSdk": 27,
+            "versionCode": 1,
+            "versionName": "0.0.1"
+    ]
+}

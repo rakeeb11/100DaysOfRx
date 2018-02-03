@@ -18,3 +18,20 @@ Project is grouped into:
 │   
 
 ```
+
+## Dependencies
+### Build Dependencies
+* Gradle 4.4
+* Android plugin for Gradle 3.1.0-beta1
+* `minSdkVersion` 23
+* `compileSdkVersion` 27
+
+### Project Dependencies
+* Languages: Java, Kotlin
+* Frameworks: [Data Binding](https://developer.android.com/topic/libraries/data-binding/index.html),[RxJava](https://github.com/ReactiveX/RxJava)
+
+Other dependencies are maintained under `dependencies.gradle` under the `config` directory.
+
+## Gradle scripts
+
+Configuration file for dependencies is maintained under the `config` directory. 
