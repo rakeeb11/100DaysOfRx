@@ -1,9 +1,10 @@
 package com.infinite.rx
 
 import com.infinite.rx.challenge.week1.simpleObservable
+import com.infinite.rx.challenge.week1.getTweetsWithDatabaseOperation
+import io.reactivex.Observable
+import io.reactivex.observables.ConnectableObservable
 import org.junit.Test
-
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -46,5 +47,25 @@ class ConnectableObservableTest {
 
         // rather than using the operator publish and refCount
         // we can also go on to use share which will produce the same result
+    }
+
+    /**
+     * [ConnectableObservable.publish] can be called on any [Observable]
+     */
+    @Test
+    fun connectableObservableWithPublishAndConnect() {
+        val tweetStream = getTweetsWithDatabaseOperation()
+        // publish can be called on any observable
+        val publisher = tweetStream.publish()
+
+        // without call to connect our subscribers are put on hold
+        // never directly subscribing to the upstream observable
+        // however after a call to connect, a dedicated mediating
+        // Subscriber subscribers to upstream Observable,
+        // no matter how many downstream subscribers appeared before it
+
+        // using a connectable observable like this, any hot observables
+        // can be tracked allowing Subscribers to get the same sequence of notifications
+        publisher.connect()
     }
 }
