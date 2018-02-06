@@ -1,5 +1,6 @@
 package com.infinite.rx
 
+import com.infinite.rx.challenge.week1.connectable
 import com.infinite.rx.challenge.week1.simpleObservable
 import com.infinite.rx.challenge.week1.getTweetsWithDatabaseOperation
 import io.reactivex.Observable
@@ -67,5 +68,19 @@ class ConnectableObservableTest {
         // using a connectable observable like this, any hot observables
         // can be tracked allowing Subscribers to get the same sequence of notifications
         publisher.connect()
+    }
+
+
+    @Test
+    fun autoConnectableObservables() {
+        connectable
+                .doOnSubscribe { println("subscribed to first") }
+                .doOnNext { println("first:\t$it") }
+                .subscribe()
+
+        connectable
+                .doOnSubscribe { println("subscribed to second") }
+                .doOnNext { println("second:\t$it") }
+                .subscribe()
     }
 }
