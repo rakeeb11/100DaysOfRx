@@ -1,11 +1,10 @@
 package com.infinite.rx
 
-import com.infinite.rx.challenge.week1.connectable
-import com.infinite.rx.challenge.week1.simpleObservable
-import com.infinite.rx.challenge.week1.getTweetsWithDatabaseOperation
+import com.infinite.rx.challenge.week1.*
 import io.reactivex.Observable
 import io.reactivex.observables.ConnectableObservable
 import org.junit.Test
+import java.util.concurrent.TimeUnit
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -19,14 +18,21 @@ class ConnectableObservableTest {
         // the code block showcases how subscribing to an
         // observable multiple times can trigger multiple connections
         // establishing connection is printed out twice ...
-        val one = simpleObservable().subscribe()
-        println("subscribed to one")
-        val two = simpleObservable().subscribe()
-        println("subscribed to two")
+        val one = simpleObservable().test()
+        "subscribed to one".print()
+        val two = simpleObservable().test()
+        "subscribed to two".print()
+
+        one.assertSubscribed()
+        two.assertSubscribed()
+
         one.dispose()
-        println("disposed one")
+        "disposed one".print()
         two.dispose()
-        println("disposed two")
+        "disposed two".print()
+
+        assert(one.isDisposed)
+        assert(two.isDisposed)
     }
 
     @Test
@@ -36,15 +42,15 @@ class ConnectableObservableTest {
         val lazy = simpleObservable().publish().refCount()
         // refCount is an operator that will count the active Subscribers
         // when the count goes from n to 0 refCount unsubscribes automatically
-        println("Before subscribers")
+        "Before subscribers".print()
         val one = lazy.subscribe()
-        println("Subscribed to 1")
+        "Subscribed to 1".print()
         val two = lazy.subscribe()
-        println("Subscribed to 2")
+        "Subscribed to 2".print()
         one.dispose()
-        println("Disposed to 1")
+        "Disposed to 1".print()
         two.dispose()
-        println("Disposed to 2")
+        "Disposed to 2".print()
 
         // rather than using the operator publish and refCount
         // we can also go on to use share which will produce the same result
@@ -73,14 +79,48 @@ class ConnectableObservableTest {
 
     @Test
     fun autoConnectableObservables() {
-        connectable
-                .doOnSubscribe { println("subscribed to first") }
-                .doOnNext { println("first:\t$it") }
+        autoConnectConnectable
+                .doOnSubscribe { "subscribed to first".print() }
+                .doOnNext { "first:\t$it".print() }
                 .subscribe()
 
-        connectable
-                .doOnSubscribe { println("subscribed to second") }
-                .doOnNext { println("second:\t$it") }
+        autoConnectConnectable
+                .doOnSubscribe { "subscribed to second".print() }
+                .doOnNext { "second:\t$it".print() }
                 .subscribe()
+    }
+
+    @Test
+    fun replayConnectableObservables() {
+
+        val first = replayConnectable
+                .doOnSubscribe { "subscribed to first".print() }
+                .doOnNext { "first:\t$it".print() }
+                .doOnComplete { "first completed".print() }
+                .test()
+
+        val second = replayConnectable
+                .doOnSubscribe { "subscribed to second".print() }
+                .doOnNext { "second:\t$it".print() }
+                .doOnComplete { "second completed".print() }
+                .delaySubscription(3, TimeUnit.SECONDS)
+                .test()
+
+        // check the first stream
+        first
+                .assertNoErrors()
+                .assertComplete()
+                .assertSubscribed()
+                .assertValueSet(NUMBERS)
+
+        // wait for the second stream to finish
+        second.awaitTerminalEvent()
+
+        // check the second stream
+        second
+                .assertNoErrors()
+                .assertComplete()
+                .assertSubscribed()
+                .assertValueSet(NUMBERS)
     }
 }

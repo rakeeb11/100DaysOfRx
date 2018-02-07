@@ -2,7 +2,7 @@ package com.infinite.rx.challenge.week1
 
 import io.reactivex.Observable
 
-val connectable by lazy {
+val autoConnectConnectable by lazy {
     Observable.create<Long> {
         println("initializing observable ...")
         it.setCancellable { println("killing observable ...") }
