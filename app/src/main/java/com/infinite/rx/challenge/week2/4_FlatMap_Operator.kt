@@ -3,8 +3,8 @@ package com.infinite.rx.challenge.week2
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
-fun getUser(id: Int) = Observable
-        .fromCallable { User(id) }
+fun getUser(id: Int, time: Long = 0) = Observable
+        .fromCallable { User(id, time) }
 
 val userFlatMapStream = userIdStream
         .flatMap {
