@@ -20,16 +20,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
     testImplementation 'junit:junit:4.12'
+    testImplementation "org.robolectric:robolectric:3.7"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation google.appCompat
     implementation google.recyclerView
     implementation google.design
     implementation rx.java
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
