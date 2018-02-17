@@ -1,5 +1,6 @@
 package com.infinite.rx
 
+import com.infinite.rx.challenge.print
 import com.infinite.rx.challenge.week1.*
 import io.reactivex.Observable
 import io.reactivex.observables.ConnectableObservable

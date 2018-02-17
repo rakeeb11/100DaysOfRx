@@ -1,7 +1,7 @@
 package com.infinite.rx.challenge.week1
 
+import com.infinite.rx.challenge.print
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
 
 val NUMBERS = listOf(1, 2, 3, 4, 5)

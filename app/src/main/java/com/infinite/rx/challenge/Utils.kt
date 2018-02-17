@@ -1,4 +1,4 @@
-package com.infinite.rx.challenge.week1
+package com.infinite.rx.challenge
 
 
 fun String.print() {
