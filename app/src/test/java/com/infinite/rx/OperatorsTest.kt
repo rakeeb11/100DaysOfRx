@@ -68,4 +68,16 @@ class OperatorsTest {
         stream
                 .assertComplete()
     }
+
+    @Test
+    fun concatDelayError() {
+        val stream = fusedStream.test()
+        stream.assertNotComplete()
+                .assertValueCount(3)
+                .assertValueAt(0, "1 & Quick")
+                .assertValueAt(1, "2 & Quick")
+                .assertValueAt(2, "2 & Sort")
+                .assertValues("1 & Quick", "2 & Quick", "2 & Sort")
+                .assertErrorMessage("Demo")
+    }
 }
