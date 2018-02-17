@@ -3,6 +3,8 @@ package com.infinite.rx
 import android.widget.EditText
 import com.infinite.rx.challenge.week1.simpleMapping
 import com.infinite.rx.challenge.week2.*
+import com.infinite.rx.challenge.week3.concatStream
+import com.infinite.rx.challenge.week3.mergeStream
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
@@ -79,5 +81,25 @@ class OperatorsTest {
                 .assertValueAt(2, "2 & Sort")
                 .assertValues("1 & Quick", "2 & Quick", "2 & Sort")
                 .assertErrorMessage("Demo")
+    }
+
+    @Test
+    fun concat() {
+        val stream = concatStream.test()
+        stream.awaitTerminalEvent()
+        stream.assertComplete()
+                .assertValueAt(0, 2)
+                .assertValueAt(1, 1)
+                .assertValueAt(2, 3)
+    }
+
+    @Test
+    fun merge() {
+        val stream = mergeStream.test()
+        stream.awaitTerminalEvent()
+        stream.assertComplete()
+                .assertValueAt(0, 2)
+                .assertValueAt(4, 1)
+                .assertValueAt(5, 3)
     }
 }
