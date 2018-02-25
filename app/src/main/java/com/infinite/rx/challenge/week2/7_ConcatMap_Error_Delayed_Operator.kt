@@ -16,4 +16,4 @@ val fusedStream = filterStream
                     }
         }
         .doOnNext { "$it received".print() }
-        .doOnError { "found error: ${it.message}" }
+        .doOnError { "found error: ${it.message}" }!!

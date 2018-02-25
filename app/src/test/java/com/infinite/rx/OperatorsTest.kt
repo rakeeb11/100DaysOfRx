@@ -1,8 +1,13 @@
 package com.infinite.rx
 
 import android.widget.EditText
+import android.widget.TextView
+import com.infinite.rx.challenge.print
 import com.infinite.rx.challenge.week1.simpleMapping
 import com.infinite.rx.challenge.week2.*
+import com.infinite.rx.challenge.week3.*
+import io.reactivex.Observable
+import io.reactivex.ObservableSource
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
@@ -79,5 +84,93 @@ class OperatorsTest {
                 .assertValueAt(2, "2 & Sort")
                 .assertValues("1 & Quick", "2 & Quick", "2 & Sort")
                 .assertErrorMessage("Demo")
+    }
+
+    @Test
+    fun concat() {
+        val stream = concatStream.test()
+        stream.awaitTerminalEvent()
+        stream.assertComplete()
+                .assertValueAt(0, 2)
+                .assertValueAt(1, 1)
+                .assertValueAt(2, 3)
+    }
+
+    @Test
+    fun merge() {
+        val stream = mergeStream.test()
+        stream.awaitTerminalEvent()
+        stream.assertComplete()
+                .assertValueAt(0, 2)
+                .assertValueAt(4, 1)
+                .assertValueAt(5, 3)
+    }
+
+    @Test
+    fun mergedDelay() {
+        val stream = mergedStream
+                .test()
+        stream.awaitTerminalEvent()
+        stream.assertNotComplete()
+    }
+
+    @Test
+    fun zippedStream() {
+        val stream = studentStream.test()
+        stream.assertComplete()
+    }
+
+
+    @Test
+    fun zippedWithTimeStamp() {
+        val stream = streamWithZipAndTimeStamp
+                .doOnEvent { t1, t2 ->
+                    "on event: 1: $t1".print()
+                    "on event: 2: $t2".print()
+                }
+                .doOnSuccess {
+                    "success $it".print()
+                }
+                .test()
+        stream.awaitTerminalEvent()
+        stream.assertComplete()
+    }
+
+    @Test
+    fun combineLatestStreams() {
+        val stream = latestStreams
+                .doOnNext { "next: $it".print() }
+                .test()
+        stream.awaitTerminalEvent()
+        stream.assertComplete()
+    }
+
+    @Test
+    fun combineLatestUi() {
+        val context = RuntimeEnvironment.application
+        val email = TextView(context)
+        val password = TextView(context)
+        val stream = validInputStream(email, password)
+                .test()
+        email.text = "rakeeb@"
+        password.text = "rakeeb"
+        email.text = "rakeeb@evolveasia.co"
+        password.text = "rakeeb00"
+        stream.awaitTerminalEvent()
+    }
+
+    @Test
+    fun ambiguous() {
+        val stream = Observable.amb(arrayListOf<ObservableSource<String>>(
+                stream(100, 17, "first"),
+                stream(100, 10, "second")
+        ))
+                .take(5)
+                .test()
+
+        stream.awaitTerminalEvent()
+        stream
+                .assertValueCount(5)
+                .assertComplete()
     }
 }
