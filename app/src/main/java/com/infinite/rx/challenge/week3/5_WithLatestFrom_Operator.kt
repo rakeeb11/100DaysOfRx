@@ -8,4 +8,4 @@ import io.reactivex.functions.BiFunction
 
 fun tapStream(context: Context, button: Button) = RxView.clicks(button)
         .withLatestFrom(validInputStream(TextView(context), TextView(context)),
-                BiFunction { click: Any, status: Boolean -> status })
+                BiFunction { _: Any, status: Boolean -> status })

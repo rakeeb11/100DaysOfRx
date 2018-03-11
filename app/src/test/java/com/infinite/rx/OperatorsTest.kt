@@ -6,6 +6,7 @@ import com.infinite.rx.challenge.print
 import com.infinite.rx.challenge.week1.simpleMapping
 import com.infinite.rx.challenge.week2.*
 import com.infinite.rx.challenge.week3.*
+import com.infinite.rx.challenge.week4.*
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import org.junit.Test
@@ -172,5 +173,93 @@ class OperatorsTest {
         stream
                 .assertValueCount(5)
                 .assertComplete()
+    }
+
+    @Test
+    fun scanning() {
+        val stream = scanningSequence
+                .test()
+        stream.awaitTerminalEvent()
+        stream
+                .assertValueCount(4)
+                .assertComplete()
+    }
+
+    @Test
+    fun collectionBigNumbers() {
+        val stream = collectionBigNumbersStream.test()
+        stream.assertComplete()
+                .assertValueCount(1)
+                .assertValue(BigNumbers(28 ,29))
+    }
+
+    @Test
+    fun groupBy() {
+        val stream = groupedStream.test()
+        stream.assertComplete()
+    }
+
+    @Test
+    fun defaultIfEmpty() {
+        val stream = emptyStream.test()
+        stream.assertComplete()
+                .assertValueCount(1)
+                .assertValue(10)
+    }
+
+    @Test
+    fun streamWithDefaultValue() {
+        val stream = streamWithDefaultValue.test()
+        stream.assertComplete()
+                .assertValueCount(5)
+                .assertValueAt(4, 5)
+    }
+
+    @Test
+    fun streamWithDefaultValueAndFilter() {
+        val stream = streamWithFilterAndDefaultValue.test()
+        stream.assertComplete()
+                .assertValueCount(1)
+                .assertValue(11)
+    }
+
+    @Test
+    fun distinctNews() {
+        val stream = distinctNewsStream.test()
+        stream.assertComplete()
+                .assertValueCount(5)
+    }
+
+    @Test
+    fun distinctUntilChangedNews() {
+        val stream = distinctNewsUntilChangedStream.test()
+        stream.assertComplete()
+                .assertValueCount(12)
+    }
+
+    @Test
+    fun simpleTake() {
+        val stream = simpleTake.test()
+        stream.assertComplete()
+                .assertValueCount(NEWS_TAKE_COUNT)
+    }
+
+    @Test
+    fun takeNewsStreamWhile() {
+        val stream = takeNewsStreamWhile.test()
+        stream
+                .assertComplete()
+                .assertValueCount(2)
+                .assertValueAt(0, News(1))
+                .assertValueAt(1, News(2))
+                .assertNever(News(PROMOTED_NEWS_CATEGORY))
+    }
+
+    @Test
+    fun takeLastTwoNews() {
+        val stream = takeLastTwoNewsStream.test()
+        stream
+                .assertComplete()
+                .assertValueCount(NEWS_TAKE_COUNT)
     }
 }
