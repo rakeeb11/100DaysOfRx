@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/ReactiveX/RxSwift/master/assets/Rx_Logo_M.png" alt="Miss Electric Eel 2016" width="36" height="36"> 100 days of Rx
+<img src="https://avatars.githubusercontent.com/u/6407041" width="36" height="36"> 100 days of Rx
 ======================================
 > Getting better with Rx. One commit per day :smile:
 
